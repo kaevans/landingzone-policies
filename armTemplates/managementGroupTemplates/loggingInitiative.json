@@ -1,0 +1,90 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "mgmtGroupId": {
+            "type": "string",
+            "metadata": {
+                "description": "Provide the management group id where this policy will be assigned."
+            }
+        }
+    },
+    "variables": {
+        "requireSubscriptionWorkspaceIdPolicyName" : "require-diagnostics-activitylog",
+        "requireSubscriptionWorkspaceIdPolicyDescription" : "Require Activity Log Diagnostics settings are set to push logs into Log Analytics.",
+        "policySetName": "custom-logging-initiative",
+        "category":"Logging and Diagnostics",
+        "description":"Audit Logging and Diagnostics configuration."
+    },    
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policyDefinitions",
+            "apiVersion": "2018-05-01",
+            "name": "[variables('requireSubscriptionWorkspaceIdPolicyName')]",
+            "properties": {
+                "displayName": "[variables('requireSubscriptionWorkspaceIdPolicyDescription')]",
+                "policyType": "Custom",
+                "mode": "All",
+                "description": "[variables('requireSubscriptionWorkspaceIdPolicyDescription')]",
+                "metadata": {
+                    "version": "1.0.0",
+                    "category": "Tags"
+                },
+                "parameters": {                 
+                },
+                "policyRule": {
+                    "if": {
+                        "allOf": [
+                            {
+                                "field": "type",
+                                "equals": "Microsoft.Resources/subscriptions"
+                            },
+                            {
+                                "field": "Microsoft.Insights/diagnosticSettings/workspaceId",
+                                "exists": "false"
+                            }
+                        ]
+                    },
+                    "then": {
+                        "effect": "audit"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/policySetDefinitions",
+            "name": "[variables('policySetName')]",
+            "apiVersion": "2019-09-01",            
+            "metadata": {
+                "category": "[variables('category')]"
+            },
+            "dependsOn": [
+                "[variables('requireSubscriptionWorkspaceIdPolicyName')]"
+            ],
+            "properties": {
+                "displayName": "[variables('description')]",
+                "description": "[variables('description')]",
+                "policyType": "Custom",
+                "metadata": {
+                    "category": "[variables('category')]"
+                },
+                "parameters": {},
+                "policyDefinitions": [
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "[concat('/providers/Microsoft.Management/managementGroups/', parameters('mgmtGroupId'), '/providers/Microsoft.Authorization/policyDefinitions/', variables('requireSubscriptionWorkspaceIdPolicyName'))]"
+                    },
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/3e596b57-105f-48a6-be97-03e9243bad6e"                        
+                    },
+                    {
+                        "parameters":{},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/41388f1c-2db0-4c25-95b2-35d7f5ccbfa9"
+                    }
+
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,44 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+    },
+    "variables": {
+        "policySetName": "bcdr-initiative",
+        "category":"Business Continuity and Disaster Recovery",
+        "description":"Audit Business Continuity and Disaster Recovery configuration."
+    },    
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policySetDefinitions",
+            "name": "[variables('policySetName')]",
+            "apiVersion": "2019-09-01",            
+            "metadata": {
+                "category": "[variables('category')]"
+            },
+            "properties": {
+                "displayName": "[variables('description')]",
+                "description": "[variables('description')]",
+                "policyType": "Custom",
+                "metadata": {
+                    "category": "[variables('category')]"
+                },
+                "parameters": {},
+                "policyDefinitions": [
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/d38fc420-0735-4ef3-ac11-c806f651a570"
+                    },
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/0b60c0b2-2dc2-4e1c-b5c9-abbed971de53"
+                    },
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/013e242c-8828-4970-87b3-ab247555486d"
+                    }
+                ]
+            }
+        }
+    ]
+}

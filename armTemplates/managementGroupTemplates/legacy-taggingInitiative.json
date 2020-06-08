@@ -27,9 +27,9 @@
         "inheritResourceGroupTagFromSubscriptionPolicyDefinitionName": "inherit-rgtag-subscription",
         "inheritTagsFromSubscriptionPolicyDefinitionId": "b27a0cbd-a167-4dfa-ae64-4337be671140",
         "requireTagsOnSubscriptionPolicyDefinitionName": "require-subscription-tagging",
-        "policySetName": "enforce-legacy-resource-tagging",
-        "policySetDisplayName": "Enforce using mandatory tags for resource groups and resources in non-enterprise subscriptions.",
-        "policySetDescription": "This policy initiative enforces the usage of mandatory tags for resource groups and resources in non-enterprise subscriptions.",
+        "policySetName": "legacy-tagging",
+        "policySetDisplayName": "Enforce using mandatory tags for subscriptions, resource groups, and resources in non-enterprise subscriptions.",
+        "policySetDescription": "This policy initiative enforces the usage of mandatory tags for subscriptions, resource groups, and resources in non-enterprise subscriptions.",
         "policySetAssignmentName": "[uniqueString(deployment().name)]",        
         "policySetAssignmentDisplayName": "[concat('Require subscription tags (mg: ',parameters('mgmtGroupId'), ')')]",
         "rbacContributor": "b24988ac-6180-42a0-ab88-20f7382dd24c"

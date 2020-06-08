@@ -1,0 +1,44 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+    },
+    "variables": {
+        "policySetName": "subscription-owner-initiative",
+        "category":"Identity Governance",
+        "description":"Audit identity configuration for subscription owners."
+    },    
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policySetDefinitions",
+            "name": "[variables('policySetName')]",
+            "apiVersion": "2019-09-01",            
+            "metadata": {
+                "category": "[variables('category')]"
+            },
+            "properties": {
+                "displayName": "[variables('description')]",
+                "description": "[variables('description')]",
+                "policyType": "Custom",
+                "metadata": {
+                    "category": "[variables('category')]"
+                },
+                "parameters": {},
+                "policyDefinitions": [
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/09024ccc-0c5f-475e-9457-b7c0d9ed487b"
+                    },
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/aa633080-8b72-40c4-a2d7-d00c03e80bed"
+                    },
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/10ee2ea2-fb4d-45b8-a7e9-a2e770044cd9"
+                    }
+                ]
+            }
+        }
+    ]
+}

@@ -1,0 +1,66 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+    },
+    "variables": {
+        "policySetName": "network-security-initiative",
+        "category":"Network",
+        "description":"Audit network security configuration."
+    },    
+    "resources": [
+        {
+            "type": "Microsoft.Authorization/policySetDefinitions",
+            "name": "[variables('policySetName')]",
+            "apiVersion": "2019-09-01",            
+            "metadata": {
+                "category": "[variables('category')]"
+            },
+            "properties": {
+                "displayName": "[variables('description')]",
+                "description": "[variables('description')]",
+                "policyType": "Custom",
+                "metadata": {
+                    "category": "[variables('category')]"
+                },
+                "parameters": {
+                },
+                "policyDefinitions": [
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/60d21c4f-21a3-4d94-85f4-b924e6aeeda4"
+                    },
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/2c89a2e5-7285-40fe-afe0-ae8654b92fab"
+                    },
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/e372f825-a257-4fb8-9175-797a8a8627d6"
+                    },
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/83a86a26-fd1f-447c-b59d-e51f44264114"
+                    },
+                    {
+                        "parameters": {},
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/35f9c03a-cc27-418e-9c0c-539ff999d010"
+                    },
+                    {
+                        "parameters": {
+                            "listOfResourceTypesNotAllowed": {
+                                "value": [
+                                    "microsoft.network/publicipaddresses",
+                                    "microsoft.network/vpngateways",
+                                    "microsoft.network/p2svpngateways",
+                                    "microsoft.network/expressroutecircuits"
+                                ]
+                            }
+                        },
+                        "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/6c112d4e-5bc7-47ae-a041-ea2d9dccd749"
+                    }
+                ]
+            }
+        }
+    ]
+}
