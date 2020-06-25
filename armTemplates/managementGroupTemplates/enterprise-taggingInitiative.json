@@ -2,37 +2,13 @@
     "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "mgmtGroupId": {
-            "type": "string",
-            "metadata": {
-                "description": "Provide the management group id where this policy will be assigned."
-            }
-        },
-        "tagName": {
-            "type": "string",
-            "defaultValue": "serviceName",
-            "metadata": {
-                "description": "Tag name used for billing."
-            }
-        },
-        "rbacGuid": {
-            "type": "string",
-            "defaultValue": "[guid(deployment().name)]",
-            "metadata": {
-                "description": "Generates a GUID during deployment runtime to assign RBAC"
-            }
-        }
     },
     "variables": {
         "requireTagsOnResourceGroupsPolicyDefinitionId": "96670d01-0a4d-4649-9c89-2d3abc0a5025",        
         "inheritTagsFromResourceGroupPolicyDefinitionId": "cd3aa116-8754-49c9-a813-ad46512ece54",
         "policySetName": "enterprise-tagging",
         "policySetDisplayName": "Enforce using mandatory tags for resource groups and resources in enterprise subscriptions.",
-        "policySetDescription": "This policy initiative enforces the usage of mandatory tags for resource groups and resources in enterprise subscriptions.",              
-        "policySetAssignmentName": "[substring(concat('Enforce tags:',parameters('mgmtGroupId')),0,23)]",        
-        "rbacContributor": "b24988ac-6180-42a0-ab88-20f7382dd24c"
-
-        //"rbacOwner": "8e3af657-a8ff-443c-a75c-2fe8c4bcb635"
+        "policySetDescription": "This policy initiative enforces the usage of mandatory tags for resource groups and resources in enterprise subscriptions."
     },    
     "resources": [
         {
@@ -49,13 +25,20 @@
                 "metadata": {
                     "category": "Tags"
                 },
-                "parameters": {},
+                "parameters": {
+                    "tagName": {
+                        "type": "String",
+                        "metadata": {
+                            "displayName": "Tag Name",
+                            "description": "Name of the tag, such as 'environment'"
+                        }
+                    }
+                },
                 "policyDefinitions": [
-                    {
-                        "groupNames": null,                        
+                    {                                          
                         "parameters": {
                             "tagName": {
-                                "value": "[parameters('tagName')]"
+                                "value": "[[parameters('tagName')]"
                             }
                         },
                         "policyDefinitionId": "[concat('/providers/Microsoft.Authorization/policyDefinitions/', variables('requireTagsOnResourceGroupsPolicyDefinitionId'))]"
@@ -63,45 +46,13 @@
                     {
                         "parameters": {
                             "tagName": {
-                                "value": "[parameters('tagName')]"
+                                "value": "[[parameters('tagName')]"
                             }
                         },
                         "policyDefinitionId": "[concat('/providers/Microsoft.Authorization/policyDefinitions/', variables('inheritTagsFromResourceGroupPolicyDefinitionId'))]"
                     }
 
                 ]
-            }
-        },
-        {
-            "type": "Microsoft.Authorization/policyAssignments",
-            "apiVersion": "2019-09-01",
-            "name": "[variables('policySetAssignmentName')]",
-            "dependsOn": [
-                "[variables('policySetName')]"
-            ],     
-            "location": "[deployment().location]",
-            "identity": {
-                "type": "SystemAssigned"
-            },       
-            "properties": {
-                "description": "Require tag on resource groups and inherit resource tag from resource group.",
-                "displayName": "[concat('Require tag on resource groups and inherit resource tag (mg: ',parameters('mgmtGroupId'), ')')]",
-                "scope": "[concat('/providers/Microsoft.Management/managementGroups/', parameters('mgmtGroupId'))]",                
-                "policyDefinitionId": "[concat('/providers/Microsoft.Management/managementGroups/', parameters('mgmtGroupId'), '/providers/Microsoft.Authorization/policySetDefinitions/', variables('policySetName'))]",
-                "parameters": {}
-            }
-        },
-        {
-            "type": "Microsoft.Authorization/roleAssignments",
-            "apiVersion": "2019-04-01-preview",
-            "name": "[parameters('rbacGuid')]",
-            "dependsOn": [
-                "[variables('policySetAssignmentName')]"
-            ],
-            "properties": {
-                "principalType": "ServicePrincipal",
-                "roleDefinitionId": "[concat('/providers/Microsoft.Authorization/roleDefinitions/', variables('rbacContributor'))]",
-                "principalId": "[toLower(reference(concat('/providers/Microsoft.Authorization/policyAssignments/', variables('policySetAssignmentName')), '2018-05-01', 'Full' ).identity.principalId)]"
             }
         }
     ]

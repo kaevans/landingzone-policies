@@ -1,3 +1,7 @@
+Recommended workflow of policy as code looks like the following:
+
+![Policy as code workflow](./images/policy-as-code-workflow.png)
+
 Sample code to deploy the enterprise policy to a management group:
 
 ````

@@ -6,7 +6,7 @@
     "variables": {
         "policySetName": "network-security-initiative",
         "category":"Network",
-        "description":"Audit network security configuration."
+        "description":"Enforce network security configuration."
     },    
     "resources": [
         {
@@ -24,6 +24,13 @@
                     "category": "[variables('category')]"
                 },
                 "parameters": {
+                    "listOfResourceTypesNotAllowed": {
+                        "type": "Array",
+                        "metadata": {
+                            "displayName": "Resource types",
+                            "description": "List of resource types not allowed (ie microsoft.network/publicipaddresses)"
+                        }
+                    }
                 },
                 "policyDefinitions": [
                     {
@@ -49,12 +56,7 @@
                     {
                         "parameters": {
                             "listOfResourceTypesNotAllowed": {
-                                "value": [
-                                    "microsoft.network/publicipaddresses",
-                                    "microsoft.network/vpngateways",
-                                    "microsoft.network/p2svpngateways",
-                                    "microsoft.network/expressroutecircuits"
-                                ]
+                                "value": "[[parameters('listOfResourceTypesNotAllowed')]"
                             }
                         },
                         "policyDefinitionId": "/providers/Microsoft.Authorization/policyDefinitions/6c112d4e-5bc7-47ae-a041-ea2d9dccd749"
