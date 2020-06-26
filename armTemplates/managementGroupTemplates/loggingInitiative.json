@@ -3,8 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
     },
-    "variables": {
-        "requireSubscriptionWorkspaceIdPolicyName" : "require-diagnostics-activitylog",        
+    "variables": {        
         "policySetName": "custom-logging-initiative",
         "category":"Logging and Diagnostics",
         "description":"Audit Logging and Diagnostics configuration."
@@ -17,9 +16,6 @@
             "metadata": {
                 "category": "[variables('category')]"
             },
-            "dependsOn": [
-                "[variables('requireSubscriptionWorkspaceIdPolicyName')]"
-            ],
             "properties": {
                 "displayName": "[variables('description')]",
                 "description": "[variables('description')]",
